@@ -1,0 +1,21 @@
+<xf:macro name="thread_list_thumbnail" arg-thread="!">
+	<div class="structItem-cell structItem-cell--icon" 
+		 style="width: calc({$xf.app.thumbWidth}px + 30px);
+				height: calc({$xf.app.thumbHeight}px + 5px);">
+		<div class="structItem-iconContainer">
+			<a href="{$thread.getThumbnail()}" 
+			   title="{$thread.title}" 
+			   class="avatar dcThumbnail"
+			   style="width: {$xf.app.thumbWidth}px;
+					  height: {$xf.app.thumbHeight}px;
+					  border-radius: {$xf.app.thumbnailRadius}px">
+				<img style="background-image: url({$thread.getThumbnail()});
+							background-size: cover;
+							background-position: center;
+							object-position: -99999px 99999px;" 
+					 src="{$xf.app.base64}" 
+					 alt="{$thread.title}"/>
+			</a>
+		</div>
+	</div>
+</xf:macro>

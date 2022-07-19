@@ -2,8 +2,8 @@
     "legacy_addon_id": "",
     "title": "D.C Style - Thumbnail",
     "description": "Thumbnail for XF2.",
-    "version_id": 1000273,
-    "version_string": "1.0.2 Patch Level 3",
+    "version_id": 1000274,
+    "version_string": "1.0.2 Patch Level 4",
     "dev": "D.C Style",
     "dev_url": "https://fb.com/DumpPenguin",
     "faq_url": "",
@@ -12,7 +12,8 @@
         "Blog": "https://fb.com/dcstylexf"
     },
     "require": {
-        "XF": [2020070, "XenForo 2.2.0+"]
+        "XF": [2020070, "XenForo 2.2.0+"],
+        "DC/ImageView": [1000070, "D.C Style - Attachment View 1.0.0+"]
     },
     "icon": "logo.png"
 }

@@ -37,7 +37,7 @@ class Thumbnail extends Repository
         {
             if ($attachment->has_thumbnail)
             {
-                $images[] = $attachment->getDirectUrl(true);
+                $images[] = $this->app()->router('public')->buildLink('canonical:attachments', $attachment);
             }
         }
 

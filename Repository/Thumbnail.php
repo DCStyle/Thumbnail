@@ -4,10 +4,46 @@ namespace DC\Thumbnail\Repository;
 
 use XF\Mvc\Entity\Repository;
 use Exception;
+use XF\Util\File;
 
 class Thumbnail extends Repository
 {
-    public function getThreadImages(\XF\Entity\Thread $thread)
+    public function isContainingMediaBbCode($message)
+    {
+		if (!is_string($message))
+		{
+			return false;
+		}
+
+		return str_contains(strtolower($message), '[/media]');
+    }
+
+	public function createThumbnailForThread(\XF\Entity\Thread $thread)
+	{
+		/** @var \DC\Thumbnail\Entity\Thumbnail $exist */
+		$exist = $this->em->findOne('DC\Thumbnail:Thumbnail', ['thread_id', '=', $thread->thread_id]);
+		if ($exist)
+		{
+			return null;
+		}
+
+		$images = $this->getThreadImages($thread);
+
+		/** @var \DC\Thumbnail\Entity\Thumbnail $thumbnail */
+		$thumbnail = $this->em->create('DC\Thumbnail:Thumbnail');
+
+		$thumbnailUrl = !empty($images)
+			? $images[0]
+			: \XF::app()->router('public')->buildLink('canonical:'.\XF::options()->dcThumbnail_default_thumbnail);
+		$thumbnail->thread_id = $thread->thread_id;
+		$thumbnail->thumbnail_url = $thumbnailUrl;
+
+		$thumbnail->save();
+
+		return $thumbnail;
+	}
+
+	public function getThreadImages(\XF\Entity\Thread $thread)
     {
         $attachments = $this->getThreadAttachments($thread);
 
@@ -213,54 +249,58 @@ class Thumbnail extends Repository
         return $images;
     }
 
-    public function setThumbnailFromUpload($upload, \DC\Thumbnail\Entity\Thumbnail $thumbnail)
+    public function getThumbnailUrlFromUpload($upload, \DC\Thumbnail\Entity\Thumbnail $thumbnail)
     {
         $upload->requireImage();
 
         if (!$upload->isValid())
 		{
-			throw new \XF\PrintableException(\XF::phrase('unexpected_error_occurred'));
+			throw new Exception(\XF::phrase('unexpected_error_occurred'));
         }
         
         $target = 'data://dc_thumbnails/'.$thumbnail->thread_id.'.jpg';
 
         try
 		{
-			$image = \XF::app()->imageManager->imageFromFile($upload->getTempFile());
+			$image = $this->app()->imageManager()->imageFromFile($upload->getTempFile());
 
-            $newTempFile = \XF\Util\File::getTempFile();
+			// Crop image if exceeds the max dimensions
+			$dimensions = $this->options()->dcThumbnail_custom_thumbnailMaxDimensions;
+
+			if ($dimensions > 0)
+			{
+				$image->resizeShortEdge($dimensions);
+			}
+
+            $newTempFile = File::getTempFile();
 
 			if ($newTempFile && $image->save($newTempFile))
 			{
 				$output = $newTempFile;
+				File::copyFileToAbstractedPath($output, $target);
 			}
 			unset($image);
-			
-			\XF\Util\File::copyFileToAbstractedPath($output, $target);
 
             $thumbnailImage = 'data://dc_thumbnails/'.$thumbnail->thread_id.'.jpg';
 
-            if (\XF\Util\File::abstractedPathExists($thumbnailImage))
+            if (File::abstractedPathExists($thumbnailImage))
             {
-                $thumbnail->upload_url = $this->app()->applyExternalDataUrl('dc_thumbnails/'.$thumbnail->thread_id.'.jpg?'.$thumbnail->thumbnail_date, true);
-                $thumbnail->save();
+                return $this->app()->applyExternalDataUrl('dc_thumbnails/'.$thumbnail->thread_id.'.jpg?'.$thumbnail->thumbnail_date, true);
             }
             else
             {
-                throw new \XF\PrintableException(\XF::phrase('file_not_found'));
+                throw new Exception(\XF::phrase('file_not_found'));
             }
 		}
 		catch (Exception $e)
 		{
-			throw new \XF\PrintableException(\XF::phrase('unexpected_error_occurred'));
+			throw new Exception($e->getMessage());
 		}
-
-        return true;
     }
 
     public function deleteThumbnailImage(\DC\Thumbnail\Entity\Thumbnail $thumbnail)
     {
-        \XF\Util\File::deleteFromAbstractedPath('data://dc_thumbnails/'.$thumbnail->thread_id.'.jpg');
+        File::deleteFromAbstractedPath('data://dc_thumbnails/'.$thumbnail->thread_id.'.jpg');
 
         return true;
     }

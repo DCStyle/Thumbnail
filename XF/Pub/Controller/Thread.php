@@ -28,34 +28,52 @@ class Thread extends XFCP_Thread
         {
             if (!$thumbnail)
             {
-                $thumbnail = $this->em()->create('DC\Thumbnail:Thumbnail');
+                /** @var \DC\Thumbnail\Entity\Thumbnail $thumbnail */
+				$thumbnail = $this->em()->create('DC\Thumbnail:Thumbnail');
             }
 
             $thumbnail->thread_id = $thread->thread_id;
-
-            if ($this->filter('image_url', 'str') != 'custom')
-            {
-                $thumbnail->thumbnail_url = $this->filter('image_url', 'str');
-            }
-            
-            $thumbnail->save();
-
-            if ($this->filter('image_url', 'str') == 'custom')
-            {
-                if ($upload = $this->request->getFile('upload', false, false))
-                {
-                    $thumbnailRepo->setThumbnailFromUpload($upload, $thumbnail);
-                }
-            }
-
+			
+			$imageUrl = $this->filter('image_url', 'str');
+			switch ($imageUrl)
+			{
+				case 'default':
+					$thumbnailRepo->deleteThumbnailImage($thumbnail);
+					
+					$thumbnail->thumbnail_url = $thread->getDefaultThumbnail();
+					$thumbnail->upload_url = '';
+					break;
+				case 'custom':
+					if ($upload = $this->request->getFile('upload', false, false))
+					{
+						try {
+							$customThumbnailUrl = $thumbnailRepo->getThumbnailUrlFromUpload($upload, $thumbnail);
+							
+							$thumbnail->thumbnail_url = '';
+							$thumbnail->upload_url = $customThumbnailUrl;
+						} catch (\Exception $e)
+						{
+							throw $this->exception($this->error($e->getMessage()));
+						}
+					}
+					
+					break;
+				default: // An actual image url in first post
+					$thumbnailRepo->deleteThumbnailImage($thumbnail);
+					
+					$thumbnail->thumbnail_url = $this->filter('image_url', 'str');
+					$thumbnail->upload_url = '';
+					break;
+			}
+			
             if ($this->filter('delete_custom_image', 'bool'))
             {
                 $thumbnailRepo->deleteThumbnailImage($thumbnail);
-
-                $thumbnail->thumbnail_url = $noImageLink;
-                $thumbnail->upload_url = '';
-                $thumbnail->save();
             }
+
+			$thumbnail->is_video = $this->filter('is_video', 'int');
+
+	        $thumbnail->save();
 
             return $this->redirect($this->getDynamicRedirect($this->buildLink('threads', $thread)));
         }
@@ -63,7 +81,8 @@ class Thread extends XFCP_Thread
         $viewParams = [
             'thread'    => $thread,
             'images'    => $images,
-            'thumbnail' => $thumbnail
+            'thumbnail' => $thumbnail,
+	        'noImageLink' => $noImageLink
         ];
 
         return $this->view('XF:Thread\EditThumbnail', 'dcThumbnail_thread_edit_thumbnail', $viewParams);

@@ -1,0 +1,1 @@
+If enabled, the add-on will try to replace user avatar for default thumbnail if possible.

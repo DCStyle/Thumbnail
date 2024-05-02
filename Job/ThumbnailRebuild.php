@@ -47,6 +47,7 @@ class ThumbnailRebuild extends AbstractRebuildJob
             return;
         }
 
+		/** @var \DC\Thumbnail\Entity\Thumbnail $thumbnail */
         $thumbnail = $em->find('DC\Thumbnail:Thumbnail', $id);
 
         if ($thumbnail && !$this->data['replace_current'])
@@ -66,22 +67,15 @@ class ThumbnailRebuild extends AbstractRebuildJob
         if (!empty($images))
         {
             $thumbnailUrl = $images[0];
+	        $thumbnail->is_no_thumbnail = false;
         }
-        else
+        else // Has no thumbnail
         {
-            $noThumbnail = \XF::options()->dcThumbnail_default_thumbnail;
-            if (filter_var($noThumbnail, FILTER_VALIDATE_URL) !== false)
-            {
-                $thumbnailUrl = $noThumbnail;
-            }
-            else
-            {
-                $thumbnailUrl = \XF::app()->router('public')->buildLink('canonical:'.$noThumbnail);
-            }
+            $thumbnailUrl = '';
+			$thumbnail->is_no_thumbnail = true;
         }
 
         $thumbnail->thread_id = $thread->thread_id;
-        
         $thumbnail->thumbnail_url = $thumbnailUrl;
 
         $thumbnail->save();

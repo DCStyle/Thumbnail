@@ -1,0 +1,50 @@
+{
+    "option.dcThumbnail_default_thumbnail_avatar.txt": {
+        "global_cache": false,
+        "version_id": 1000491,
+        "version_string": "1.0.4 Patch Level 1",
+        "hash": "6498480774b1ac94eb85dba0ecbaa857"
+    },
+    "option.dcThumbnail_thumbnail_height.txt": {
+        "global_cache": false,
+        "version_id": 1000570,
+        "version_string": "1.0.5",
+        "hash": "b61adba288c60ab029ea65178305278f"
+    },
+    "option.dcThumbnail_thumbnail_height_widget.txt": {
+        "global_cache": false,
+        "version_id": 1000570,
+        "version_string": "1.0.5",
+        "hash": "cdd4a8e195500f437e00cfdc738d8ce0"
+    },
+    "option.dcThumbnail_thumbnail_width.txt": {
+        "global_cache": false,
+        "version_id": 1000570,
+        "version_string": "1.0.5",
+        "hash": "c61c7a034301ef2f67cbf3f9bef0346c"
+    },
+    "option.dcThumbnail_thumbnail_width_widget.txt": {
+        "global_cache": false,
+        "version_id": 1000570,
+        "version_string": "1.0.5",
+        "hash": "b41d4ae56aa5f7fffbfa817f5c924bc6"
+    },
+    "option_explain.dcThumbnail_default_thumbnail_avatar.txt": {
+        "global_cache": false,
+        "version_id": 1000491,
+        "version_string": "1.0.4 Patch Level 1",
+        "hash": "83cb92c9f7055b500b958da8fefa2e82"
+    },
+    "option_explain.dcThumbnail_thumbnail_height_widget.txt": {
+        "global_cache": false,
+        "version_id": 1000570,
+        "version_string": "1.0.5",
+        "hash": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    "option_explain.dcThumbnail_thumbnail_width_widget.txt": {
+        "global_cache": false,
+        "version_id": 1000570,
+        "version_string": "1.0.5",
+        "hash": "d41d8cd98f00b204e9800998ecf8427e"
+    }
+}

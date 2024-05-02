@@ -1,0 +1,9 @@
+{
+    "template": "thread_list_macros",
+    "description": "Add thumbnail for widgets",
+    "execution_order": 10,
+    "enabled": true,
+    "action": "str_replace",
+    "find": "<div class=\"contentRow-figure\">\n\t\t\t<xf:avatar user=\"$thread.User\" size=\"xxs\" defaultname=\"{$thread.username}\" />\n\t\t</div>",
+    "replace": "<xf:if is=\"$thread.getThumbnail()\">\n\t<xf:macro name=\"thread_list_thumbnail\"\n\t\t\t  template=\"dcThumbnail_thumbnail_macros\"\n\t\t\t  arg-thread=\"{$thread}\"\n\t\t\t  arg-isWidget=\"{{ true }}\" />\n<xf:else/>\n\t$0\t\n</xf:if>"
+}

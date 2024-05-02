@@ -28,11 +28,25 @@ class Thread extends XFCP_Thread
 
 	public function getDefaultThumbnail()
     {
-		$baseUrl = \XF::app()->request()->getFullBasePath();
-		$baseUrl = trim($baseUrl, '/');
-		$baseUrl .= '/' . $this->app()->options()->dcThumbnail_default_thumbnail;
-		
-		return $baseUrl;
+		if (\XF::app()->options()->dcThumbnail_default_thumbnail_avatar
+			&& $this->User
+			&& $this->User->getAvatarType() !== 'default'
+		)
+		{
+			return $this->User->getAvatarUrl('l', null, true);
+		}
+
+	    $noThumbnail = \XF::options()->dcThumbnail_default_thumbnail;
+	    if (filter_var($noThumbnail, FILTER_VALIDATE_URL) !== false)
+	    {
+		    $noThumbnailUrl = $noThumbnail;
+	    }
+	    else
+	    {
+		    $noThumbnailUrl = \XF::app()->router('public')->buildLink('canonical:'. $noThumbnail);
+	    }
+
+		return $noThumbnailUrl;
     }
 	
 	public function getThumbnail()
@@ -45,8 +59,7 @@ class Thread extends XFCP_Thread
         }
 
         $thumbnail = $this->getThumbnailEntity();
-
-        if ($thumbnail)
+        if ($thumbnail && !$thumbnail->is_no_thumbnail)
         {
             if ($thumbnail->upload_url)
             {
@@ -59,7 +72,7 @@ class Thread extends XFCP_Thread
             }
         }
 
-        return $this->app()->router('public')->buildLink('canonical:'.\XF::options()->dcThumbnail_default_thumbnail);
+        return $this->getDefaultThumbnail();
     }
 
     public function getThumbnailEntity()

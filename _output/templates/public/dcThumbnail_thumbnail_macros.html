@@ -1,13 +1,25 @@
-<xf:macro name="thread_list_thumbnail" arg-thread="!">
+<xf:macro name="thread_list_thumbnail" arg-thread="!" arg-isWidget="{{ false }}">
+	<xf:if is="$isWidget">
+		<xf:set var="$thumbWidth" value="{$xf.app.thumbWidthWidget}" />
+		<xf:set var="$thumbHeight" value="{$xf.app.thumbHeightWidget}" />
+		<xf:set var="$thumbWidthPadding" value="0" />
+		<xf:set var="$thumbHeightPadding" value="0" />
+	<xf:else/>
+		<xf:set var="$thumbWidth" value="{$xf.app.thumbWidth}" />
+		<xf:set var="$thumbHeight" value="{$xf.app.thumbHeight}" />
+		<xf:set var="$thumbWidthPadding" value="30" />
+		<xf:set var="$thumbHeightPadding" value="5" />
+	</xf:if>
+	
 	<div class="structItem-cell structItem-cell--icon" 
-		 style="width: calc({$xf.app.thumbWidth}px + 30px);
-				height: calc({$xf.app.thumbHeight}px + 5px);">
+		 style="width: calc({$thumbWidth}px + {$thumbWidthPadding}px);
+				height: calc({$thumbHeight}px + {$thumbHeightPadding}px);">
 		<div class="structItem-iconContainer">
-			<a href="{$thread.getThumbnail()}" 
+			<a href="{{ link('threads', $thread) }}" 
 			   title="{$thread.title}" 
 			   class="avatar dcThumbnail"
-			   style="width: {$xf.app.thumbWidth}px;
-					  height: {$xf.app.thumbHeight}px;
+			   style="width: {$thumbWidth}px;
+					  height: {$thumbHeight}px;
 					  border-radius: {$xf.app.thumbnailRadius}px">
 				<img style="background-image: url({$thread.getThumbnail()});
 							background-size: cover;

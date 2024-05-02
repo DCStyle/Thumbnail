@@ -45,6 +45,32 @@ class Setup extends AbstractSetup
 		});
 	}
 
+	public function upgrade1000570Step1()
+	{
+		$sm = $this->schemaManager();
+
+		$sm->alterTable('xf_dcThumbnail_thumbnail', function(Alter $table) {
+			$table->addColumn('is_no_thumbnail', 'tinyint', 1)->setDefault(0);
+		});
+	}
+
+	public function upgrade1000591Step1()
+	{
+		$sm = $this->schemaManager();
+
+		$sm->alterTable('xf_dcThumbnail_thumbnail', function(Alter $table) use ($sm) {
+			if (!$sm->columnExists('xf_dcThumbnail_thumbnail', 'is_no_thumbnail'))
+			{
+				$table->addColumn('is_no_thumbnail', 'tinyint', 1)->setDefault(0);
+			}
+
+			if (!$sm->columnExists('xf_dcThumbnail', 'is_video'))
+			{
+				$table->addColumn('is_video', 'tinyint', 1)->unsigned(false)->setDefault(-1);
+			}
+		});
+	}
+
 	// ############################################ FINAL UPGRADE ACTIONS ##########################
 
 	public function postUpgrade($previousVersion, array &$stateChanges)
@@ -77,6 +103,7 @@ class Setup extends AbstractSetup
 			$table->addColumn('upload_url', 'mediumtext')->nullable(true);
 			$table->addColumn('is_video', 'tinyint', 1)->unsigned(false)->setDefault(-1);
 			$table->addColumn('thumbnail_date', 'int', 10)->unsigned();
+			$table->addColumn('is_no_thumbnail', 'tinyint', 1)->setDefault(0);
 			$table->addPrimaryKey('thread_id');
 		};
 

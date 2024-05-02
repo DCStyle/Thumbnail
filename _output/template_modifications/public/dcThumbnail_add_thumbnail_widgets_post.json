@@ -1,0 +1,9 @@
+{
+    "template": "thread_list_macros",
+    "description": "Add thumbnail for widgets post",
+    "execution_order": 10,
+    "enabled": true,
+    "action": "str_replace",
+    "find": "<div class=\"contentRow-figure\">\n\t\t\t<xf:avatar user=\"$thread.LastPoster\" size=\"xxs\" defaultname=\"{$thread.last_post_username}\" />\n\t\t</div>",
+    "replace": "<xf:if is=\"$thread.getThumbnail()\">\n\t<xf:macro name=\"thread_list_thumbnail\"\n\t\t\t  template=\"dcThumbnail_thumbnail_macros\"\n\t\t\t  arg-thread=\"{$thread}\"\n\t\t\t  arg-isWidget=\"{{ true }}\" />\n<xf:else/>\n\t$0\n</xf:if>\t"
+}

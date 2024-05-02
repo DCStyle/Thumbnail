@@ -12,6 +12,7 @@ use XF\Mvc\Entity\Structure;
  * @property string $upload_url
  * @property int $is_video Define if a thread thumbnail is video: 1 is true, 0 is false, -1 is unset (auto-detect)
  * @property int $thumbnail_date
+ * @property bool $is_no_thumbnail
  *
  * RELATIONS
  * @property \XF\Entity\Thread $Thread
@@ -29,7 +30,8 @@ class Thumbnail extends Entity
             'thumbnail_url'         => ['type' => self::STR, 'default' => ''],
             'upload_url'            => ['type' => self::STR, 'default' => ''],
 	        'is_video'              => ['type' => self::INT, 'default' => -1],
-            'thumbnail_date'        => ['type' => self::UINT, 'default' => \XF::$time]
+            'thumbnail_date'        => ['type' => self::UINT, 'default' => \XF::$time],
+	        'is_no_thumbnail'       => ['type' => self::BOOL, 'default' => false]
         ];
         $structure->relations = [
             'Thread' => [

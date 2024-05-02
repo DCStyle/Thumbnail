@@ -1,0 +1,23 @@
+{
+    "dcThumbnail_custom_thumbnailMaxDimensions.json": {
+        "hash": "1afc5ed89dac1c9a59b267b3e48b73da"
+    },
+    "dcThumbnail_default_thumbnail_avatar.json": {
+        "hash": "7a76f5815e08e99244dafeb3840faad7"
+    },
+    "dcThumbnail_thumbnail_borderRadius.json": {
+        "hash": "6892747f48da9358d1b68d705764973d"
+    },
+    "dcThumbnail_thumbnail_height.json": {
+        "hash": "39ca3d354107975bb0500591786f9df2"
+    },
+    "dcThumbnail_thumbnail_height_widget.json": {
+        "hash": "3d83d3d259953b65b312e1266f34bcad"
+    },
+    "dcThumbnail_thumbnail_width.json": {
+        "hash": "b2eafeea1101f6c7ed49aabda26aa158"
+    },
+    "dcThumbnail_thumbnail_width_widget.json": {
+        "hash": "60822076ef44f8836d0fd8b41268155f"
+    }
+}

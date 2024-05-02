@@ -32,11 +32,10 @@ class Thumbnail extends Repository
 		/** @var \DC\Thumbnail\Entity\Thumbnail $thumbnail */
 		$thumbnail = $this->em->create('DC\Thumbnail:Thumbnail');
 
-		$thumbnailUrl = !empty($images)
-			? $images[0]
-			: \XF::app()->router('public')->buildLink('canonical:'.\XF::options()->dcThumbnail_default_thumbnail);
+		$thumbnailUrl = !empty($images) ? $images[0] : '';
 		$thumbnail->thread_id = $thread->thread_id;
 		$thumbnail->thumbnail_url = $thumbnailUrl;
+		$thumbnail->is_no_thumbnail = empty($images);
 
 		$thumbnail->save();
 

@@ -1,4 +1,9 @@
 {
+    "public/dcThumbnail_thread_edit_thumbnail.html": {
+        "version_id": 1000591,
+        "version_string": "1.0.5 Patch Level 1",
+        "hash": "d9b17e3dd9b3ea6126cf16e6f5a5bb27"
+    },
     "public/dcThumbnail_thumbnail_macros.html": {
         "version_id": 1000591,
         "version_string": "1.0.5 Patch Level 1",

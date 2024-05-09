@@ -10,7 +10,6 @@ class Thread extends XFCP_Thread
     {
         /** @var \DC\Thumbnail\XF\Entity\Thread $thread */
         $thread = $this->assertViewableThread($params->thread_id);
-
         if (!$thread->canEditThumbnail())
         {
             return $this->noPermission();
@@ -40,8 +39,9 @@ class Thread extends XFCP_Thread
 				case 'default':
 					$thumbnailRepo->deleteThumbnailImage($thumbnail);
 					
-					$thumbnail->thumbnail_url = $thread->getDefaultThumbnail();
+					$thumbnail->thumbnail_url = '';
 					$thumbnail->upload_url = '';
+					$thumbnail->is_no_thumbnail = true;
 					break;
 				case 'custom':
 					if ($upload = $this->request->getFile('upload', false, false))
@@ -51,6 +51,7 @@ class Thread extends XFCP_Thread
 							
 							$thumbnail->thumbnail_url = '';
 							$thumbnail->upload_url = $customThumbnailUrl;
+							$thumbnail->is_no_thumbnail = false;
 						} catch (\Exception $e)
 						{
 							throw $this->exception($this->error($e->getMessage()));
@@ -61,8 +62,9 @@ class Thread extends XFCP_Thread
 				default: // An actual image url in first post
 					$thumbnailRepo->deleteThumbnailImage($thumbnail);
 					
-					$thumbnail->thumbnail_url = $this->filter('image_url', 'str');
+					$thumbnail->thumbnail_url = $imageUrl;
 					$thumbnail->upload_url = '';
+					$thumbnail->is_no_thumbnail = false;
 					break;
 			}
 			
@@ -72,7 +74,6 @@ class Thread extends XFCP_Thread
             }
 
 			$thumbnail->is_video = $this->filter('is_video', 'int');
-
 	        $thumbnail->save();
 
             return $this->redirect($this->getDynamicRedirect($this->buildLink('threads', $thread)));
@@ -88,11 +89,13 @@ class Thread extends XFCP_Thread
         return $this->view('XF:Thread\EditThumbnail', 'dcThumbnail_thread_edit_thumbnail', $viewParams);
     }
 
+	/**
+	 * @param int $threadId
+	 * @return \DC\Thumbnail\Entity\Thumbnail|\XF\Mvc\Entity\Entity|null
+	 */
     protected function assertViewableThumbnail($threadId)
     {
-        $thumbnail = $this->em()->find('DC\Thumbnail:Thumbnail', $threadId);
-
-        return $thumbnail;
+	    return $this->em()->find('DC\Thumbnail:Thumbnail', $threadId);
     }
 
     /**

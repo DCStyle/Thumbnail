@@ -1,0 +1,1 @@
+If enabled, thumbnail cache will automatically rebuilt any time there is a change in thread first post.

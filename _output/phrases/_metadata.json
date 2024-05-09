@@ -1,4 +1,10 @@
 {
+    "option.dcThumbnail_auto_rebuild_after_post_changes.txt": {
+        "global_cache": false,
+        "version_id": 1000592,
+        "version_string": "1.0.5 Patch Level 2",
+        "hash": "a97ea4cfad943414b7bfaf9b9afabe1f"
+    },
     "option.dcThumbnail_default_thumbnail_avatar.txt": {
         "global_cache": false,
         "version_id": 1000491,
@@ -28,6 +34,12 @@
         "version_id": 1000570,
         "version_string": "1.0.5",
         "hash": "b41d4ae56aa5f7fffbfa817f5c924bc6"
+    },
+    "option_explain.dcThumbnail_auto_rebuild_after_post_changes.txt": {
+        "global_cache": false,
+        "version_id": 1000592,
+        "version_string": "1.0.5 Patch Level 2",
+        "hash": "c89cd1acd1387001f8264b6bc0ac307c"
     },
     "option_explain.dcThumbnail_default_thumbnail_avatar.txt": {
         "global_cache": false,

@@ -1,0 +1,71 @@
+<xf:title>{{ phrase('edit_thumbnail') }}</xf:title>
+
+<xf:head option="metaNoindex"><meta name="robots" content="noindex" /></xf:head>
+
+<xf:breadcrumb source="$thread.getBreadcrumbs()" />
+
+<xf:css src="dcThumbnail.less" />
+
+<xf:form action="{{ link('threads/edit-thumbnail', $thread) }}" ajax="true" class="block block-thumbnails">
+	<div class="block-container">
+		<div class="block-body">
+			<xf:formrow label="{{ phrase('current_image') }}">
+				<xf:if is="$thread.getThumbnail()">
+					<img src="{$thread.getThumbnail()}" class="avatar avatar--m" />
+				<xf:else/>
+					{{ phrase('none') }}
+				</xf:if>
+			</xf:formrow>
+			
+			<xf:radiorow label="{{ phrase('choose_an_image') }}" name="image_url">
+				
+				<xf:option value="default"
+						   label="{{ phrase('no_thumbnail') }} ({{ phrase('default_thumbnail_image') }})"
+						   checked="{{ $thread.getThumbnail() == $thread.getDefaultThumbnail() }}"/>
+				
+				<xf:foreach loop="$images" value="$imageUrl">
+					<xf:option value="{$imageUrl}" checked="{{ $thread.getThumbnail() == $imageUrl }}">
+						<xf:html>
+							<img src="{$imageUrl}" 
+								 data-xf-init="tooltip"
+								 title="{$imageUrl}"
+								 class="avatar avatar--m" />
+						</xf:html>
+					</xf:option>
+				</xf:foreach>
+				
+				<xf:option label="{{ phrase('custom') }}" 
+						   checked="{{ ($thread.getThumbnailEntity() && $thread.getThumbnailEntity().upload_url !== '') }}"
+						   value="custom">
+					<xf:dependent>
+						<label>{{ phrase('custom_image_upload') }}</label>
+						<xf:upload name="upload" accept=".jpg, .jpeg, .png" />
+					</xf:dependent>
+				</xf:option>
+			</xf:radiorow>
+			
+			<xf:formrow>
+				<xf:checkbox>
+					<xf:option name="delete_custom_image" 
+							   label="{{ phrase('delete') }}"
+							   data-xf-init="tooltip"
+							   title="{{ phrase('delete_uploaded_thumbnail_image') }}"
+							   disabled="{{ (!$thread.getThumbnailEntity() OR $thread.getThumbnailEntity().upload_url == '') }}" />
+				</xf:checkbox>
+			</xf:formrow>
+			
+			<xf:selectrow name="is_video"
+						  label="{{ phrase('is_video_thread') }}"
+						  explain="{{ phrase('is_video_thread_explain') }}"
+						  value="{$thumbnail.is_video}">
+				<xf:option value="-1" label="{{ phrase('auto_detect') }}" />
+				<xf:option value="0" label="{{ phrase('no') }}" />
+				<xf:option value="1" label="{{ phrase('yes') }}" />
+			</xf:selectrow>
+			
+			<xf:hiddenval name="default_thumbnail_url" value="{$thread.getDefaultThumbnail()}" />
+		</div>
+		
+		<xf:submitrow icon="save" />
+	</div>
+</xf:form>

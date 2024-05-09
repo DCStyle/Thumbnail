@@ -1,12 +1,15 @@
 {
-    "edit_format": "onoff",
-    "edit_format_params": "",
-    "data_type": "boolean",
-    "sub_options": [],
+    "edit_format": "checkbox",
+    "edit_format_params": "custom_avatar=Custom uploaded avatar\ngravatar=Gravatar",
+    "data_type": "array",
+    "sub_options": [
+        "custom_avatar",
+        "gravatar"
+    ],
     "validation_class": "",
     "validation_method": "",
     "advanced": false,
-    "default_value": "1",
+    "default_value": "{\"custom_avatar\":true,\"gravatar\":true}",
     "relations": {
         "dcThumbnail": 2
     }

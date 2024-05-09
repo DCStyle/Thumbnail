@@ -4,7 +4,18 @@ namespace DC\Thumbnail\XF\Entity;
 
 class Thread extends XFCP_Thread
 {
-    public function isVideoThumbnail()
+    public function isInThumbnailForum()
+    {
+	    $nodeIds = $this->app()->options()->dcThumbnail_forums_limit;
+	    if (!in_array($this->node_id, $nodeIds) && !in_array(-1, $nodeIds))
+	    {
+		    return false;
+	    }
+
+		return true;
+    }
+
+	public function isVideoThumbnail()
     {
 	    if (!$this->FirstPost)
 	    {
@@ -28,12 +39,19 @@ class Thread extends XFCP_Thread
 
 	public function getDefaultThumbnail()
     {
-		if (\XF::app()->options()->dcThumbnail_default_thumbnail_avatar
-			&& $this->User
-			&& $this->User->getAvatarType() !== 'default'
-		)
+		$defaultThumbnailAvatar = $this->app()->options()->dcThumbnail_default_thumbnail_avatar;
+		if (!empty($defaultThumbnailAvatar) && $this->User)
 		{
-			return $this->User->getAvatarUrl('l', null, true);
+			if ($defaultThumbnailAvatar['custom_avatar']
+				&& $this->User->getAvatarType() == 'custom')
+			{
+				return $this->User->getAvatarUrl('o', null, true);
+			} elseif ($defaultThumbnailAvatar['gravatar']
+				&& $this->User->getAvatarType() == 'gravatar'
+				&& $this->app()->options()->gravatarEnable
+			) {
+				return $this->User->getAvatarUrl('o', null, true);
+			}
 		}
 
 	    $noThumbnail = \XF::options()->dcThumbnail_default_thumbnail;
@@ -51,11 +69,9 @@ class Thread extends XFCP_Thread
 	
 	public function getThumbnail()
     {
-        $nodeIds = \XF::options()->dcThumbnail_forums_limit;
-
-        if (!in_array($this->node_id, $nodeIds))
+        if (!$this->isInThumbnailForum())
         {
-            return null;
+			return null;
         }
 
         $thumbnail = $this->getThumbnailEntity();
@@ -79,7 +95,6 @@ class Thread extends XFCP_Thread
     {
         /** @var \DC\Thumbnail\Entity\Thumbnail $thumbnail */
 		$thumbnail = $this->em()->find('DC\Thumbnail:Thumbnail', $this->thread_id);
-
         if ($thumbnail)
         {
             return $thumbnail;
@@ -116,10 +131,6 @@ class Thread extends XFCP_Thread
         parent::_postDelete();
         
         $thumbnail = $this->getThumbnailEntity();
-
-        if ($thumbnail)
-        {
-            $thumbnail->delete();
-        }
+	    $thumbnail?->delete();
     }
 }

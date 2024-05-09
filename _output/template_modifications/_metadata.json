@@ -4,5 +4,11 @@
     },
     "public/dcThumbnail_add_thumbnail_widgets_post.json": {
         "hash": "b878f74e8ebda6ebd06ec5971eb490af"
+    },
+    "public/dcThumbnail_search_result_post.json": {
+        "hash": "3972a08a7b4a5c20a6b978994507956c"
+    },
+    "public/dcThumbnail_search_result_thread.json": {
+        "hash": "ffbde884bf86f50dc06471acb127ea8e"
     }
 }

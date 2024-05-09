@@ -1,9 +1,15 @@
 {
+    "dcThumbnail_auto_rebuild_after_post_changes.json": {
+        "hash": "c96cf4f3134265846716a01a97ffaf65"
+    },
     "dcThumbnail_custom_thumbnailMaxDimensions.json": {
         "hash": "1afc5ed89dac1c9a59b267b3e48b73da"
     },
     "dcThumbnail_default_thumbnail_avatar.json": {
-        "hash": "7a76f5815e08e99244dafeb3840faad7"
+        "hash": "d0b8c2665ea34f4e4e90ae5399f624b9"
+    },
+    "dcThumbnail_forums_limit.json": {
+        "hash": "242a18bf44afbf4a24bb5d39536561ac"
     },
     "dcThumbnail_thumbnail_borderRadius.json": {
         "hash": "6892747f48da9358d1b68d705764973d"

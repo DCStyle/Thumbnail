@@ -20,9 +20,13 @@ class ThumbnailRebuild extends AbstractRebuildJob
         $db = $this->app->db();
 
         $nodeIds = \XF::options()->dcThumbnail_forums_limit;
-        $nodeIdsList = '(' . implode(',', $nodeIds) .')';
-
-        return $db->fetchAllColumn($db->limit('SELECT thread_id FROM xf_thread WHERE thread_id > ? AND node_id IN ' . $nodeIdsList . ' ORDER BY thread_id ', $batch), $start);
+		if (in_array(-1, $nodeIds)) // All forums
+		{
+			return $db->fetchAllColumn($db->limit('SELECT thread_id FROM xf_thread WHERE thread_id > ? ORDER BY thread_id ', $batch), $start);
+		} else { // Specific forums
+			$nodeIdsList = '(' . implode(',', $nodeIds) .')';
+			return $db->fetchAllColumn($db->limit('SELECT thread_id FROM xf_thread WHERE thread_id > ? AND node_id IN ' . $nodeIdsList . ' ORDER BY thread_id ', $batch), $start);
+		}
     }
 
     /**
